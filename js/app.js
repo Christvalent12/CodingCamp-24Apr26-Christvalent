@@ -474,67 +474,11 @@ const Todo = {
       checkbox.setAttribute('aria-label', `Mark "${task.text}" as complete`);
       checkbox.addEventListener('change', () => this.toggleComplete(task.id));
 
-      // Task text (normal view)
+      // Task text
       const textEl = document.createElement('span');
       textEl.classList.add('todo-item__text');
       textEl.textContent = task.text;
       if (task.completed) textEl.classList.add('todo-task--completed');
-
-      // Inline edit container (hidden by default)
-      const editContainer = document.createElement('div');
-      editContainer.classList.add('todo-edit-container');
-      editContainer.hidden = true;
-
-      const editInput = document.createElement('input');
-      editInput.type = 'text';
-      editInput.value = task.text;
-      editInput.setAttribute('aria-label', 'Edit task text');
-
-      const editError = document.createElement('span');
-      editError.classList.add('todo-edit-error');
-      editError.setAttribute('aria-live', 'polite');
-
-      const saveBtn = document.createElement('button');
-      saveBtn.type = 'button';
-      saveBtn.textContent = 'Save';
-      saveBtn.classList.add('btn--save');
-
-      const cancelBtn = document.createElement('button');
-      cancelBtn.type = 'button';
-      cancelBtn.textContent = 'Cancel';
-      cancelBtn.classList.add('btn--cancel');
-
-      editContainer.append(editInput, editError, saveBtn, cancelBtn);
-
-      // Double-click text to edit
-      textEl.addEventListener('dblclick', () => {
-        textEl.hidden = true;
-        editInput.value = task.text;
-        editError.textContent = '';
-        editContainer.hidden = false;
-        editInput.focus();
-      });
-
-      editInput.addEventListener('input', () => { editError.textContent = ''; });
-
-      saveBtn.addEventListener('click', () => {
-        const newText = editInput.value;
-        if (!isNonEmptyString(newText)) {
-          editError.textContent = 'Task cannot be empty.';
-          return;
-        }
-        const otherTasks = this._tasks.filter((t) => t.id !== task.id);
-        if (isDuplicateTask(newText, otherTasks)) {
-          editError.textContent = 'A task with this name already exists.';
-          return;
-        }
-        this.editTask(task.id, newText);
-      });
-
-      cancelBtn.addEventListener('click', () => {
-        editContainer.hidden = true;
-        textEl.hidden = false;
-      });
 
       // Delete button (red, right side)
       const deleteBtn = document.createElement('button');
@@ -544,7 +488,7 @@ const Todo = {
       deleteBtn.setAttribute('aria-label', `Delete task: ${task.text}`);
       deleteBtn.addEventListener('click', () => this.deleteTask(task.id));
 
-      article.append(checkbox, textEl, editContainer, deleteBtn);
+      article.append(checkbox, textEl, deleteBtn);
       list.appendChild(article);
     });
   },
