@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <button id="theme-toggle" aria-label="Switch to dark mode">🌙 Dark mode</button>
+
+      <time id="clock-time"></time>
+      <p id="clock-date"></p>
+      <p id="clock-greeting"></p>
+
+      <form id="name-form">
+        <label for="name-input">Your name</label>
+        <input
+          id="name-input"
+          type="text"
+          placeholder="Enter your name"
+          autocomplete="off"
+        />
+        <button type="submit">Save</button>
+        <span id="name-error" role="alert" aria-live="polite"></span>
+      </form>
+    </header>
+
+    <main>
+      <section aria-labelledby="timer-heading">
+        <h2 id="timer-heading">Focus Timer</h2>
+        <p id="timer-display" aria-live="polite" aria-label="Timer display">25:00</p>
+        <div>
+          <button id="timer-start" type="button">Start</button>
+          <button id="timer-stop" type="button">Stop</button>
+          <button id="timer-reset" type="button">Reset</button>
+        </div>
+        <form id="timer-duration-form">
+          <label for="timer-duration-input">Session duration (minutes)</label>
+          <input
+            id="timer-duration-input"
+            type="number"
+            min="1"
+            max="120"
+            placeholder="1–120"
+          />
+          <button type="submit">Set</button>
+          <span id="timer-duration-error" role="alert" aria-live="polite"></span>
+        </form>
+      </section>
+
+      <section aria-labelledby="todo-heading">
+        <h2 id="todo-heading">To-Do List</h2>
+        <form id="todo-form">
+          <label for="todo-input">New task</label>
+          <input
+            id="todo-input"
+            type="text"
+            placeholder="Add a task..."
+            autocomplete="off"
+          />
+          <button type="submit">Add</button>
+          <span id="todo-error" role="alert" aria-live="polite"></span>
+        </form>
+        <ul id="todo-list" aria-label="Task list" aria-live="polite"></ul>
+      </section>
+
+      <nav aria-labelledby="links-heading">
+        <h2 id="links-heading">Quick Links</h2>
+        <form id="links-form">
+          <label for="links-label-input">Label</label>
+          <input
+            id="links-label-input"
+            type="text"
+            placeholder="e.g. GitHub"
+            autocomplete="off"
+          />
+          <span id="links-label-error" role="alert" aria-live="polite"></span>
+          <label for="links-url-input">URL</label>
+          <input
+            id="links-url-input"
+            type="url"
+            placeholder="https://..."
+            autocomplete="off"
+          />
+          <span id="links-url-error" role="alert" aria-live="polite"></span>
+          <button type="submit">Add Link</button>
+        </form>
+        <div id="links-list" aria-label="Saved links" aria-live="polite"></div>
+      </nav>
+    </main>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
