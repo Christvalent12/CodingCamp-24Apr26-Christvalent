@@ -464,10 +464,19 @@ const Todo = {
 
     this._tasks.forEach((task) => {
       const article = document.createElement('article');
+      article.classList.add('todo-item');
       article.dataset.id = task.id;
 
-      // Task text
+      // Checkbox for complete toggle
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = task.completed;
+      checkbox.setAttribute('aria-label', `Mark "${task.text}" as complete`);
+      checkbox.addEventListener('change', () => this.toggleComplete(task.id));
+
+      // Task text (normal view)
       const textEl = document.createElement('span');
+      textEl.classList.add('todo-item__text');
       textEl.textContent = task.text;
       if (task.completed) textEl.classList.add('todo-task--completed');
 
@@ -488,72 +497,54 @@ const Todo = {
       const saveBtn = document.createElement('button');
       saveBtn.type = 'button';
       saveBtn.textContent = 'Save';
+      saveBtn.classList.add('btn--save');
 
       const cancelBtn = document.createElement('button');
       cancelBtn.type = 'button';
       cancelBtn.textContent = 'Cancel';
+      cancelBtn.classList.add('btn--cancel');
 
       editContainer.append(editInput, editError, saveBtn, cancelBtn);
 
-      // Edit button
-      const editBtn = document.createElement('button');
-      editBtn.type = 'button';
-      editBtn.textContent = 'Edit';
-      editBtn.setAttribute('aria-label', `Edit task: ${task.text}`);
-
-      editBtn.addEventListener('click', () => {
+      // Double-click text to edit
+      textEl.addEventListener('dblclick', () => {
         textEl.hidden = true;
-        editBtn.hidden = true;
         editInput.value = task.text;
         editError.textContent = '';
         editContainer.hidden = false;
         editInput.focus();
       });
 
-      editInput.addEventListener('input', () => {
-        editError.textContent = '';
-      });
+      editInput.addEventListener('input', () => { editError.textContent = ''; });
 
       saveBtn.addEventListener('click', () => {
         const newText = editInput.value;
-
         if (!isNonEmptyString(newText)) {
           editError.textContent = 'Task cannot be empty.';
           return;
         }
-
         const otherTasks = this._tasks.filter((t) => t.id !== task.id);
         if (isDuplicateTask(newText, otherTasks)) {
           editError.textContent = 'A task with this name already exists.';
           return;
         }
-
         this.editTask(task.id, newText);
       });
 
       cancelBtn.addEventListener('click', () => {
         editContainer.hidden = true;
         textEl.hidden = false;
-        editBtn.hidden = false;
       });
 
-      // Complete/Uncomplete toggle button
-      const toggleBtn = document.createElement('button');
-      toggleBtn.type = 'button';
-      toggleBtn.textContent = task.completed ? 'Uncomplete' : 'Complete';
-      toggleBtn.setAttribute('aria-label', task.completed
-        ? `Mark "${task.text}" as incomplete`
-        : `Mark "${task.text}" as complete`);
-      toggleBtn.addEventListener('click', () => this.toggleComplete(task.id));
-
-      // Delete button
+      // Delete button (red, right side)
       const deleteBtn = document.createElement('button');
       deleteBtn.type = 'button';
       deleteBtn.textContent = 'Delete';
+      deleteBtn.classList.add('btn--delete');
       deleteBtn.setAttribute('aria-label', `Delete task: ${task.text}`);
       deleteBtn.addEventListener('click', () => this.deleteTask(task.id));
 
-      article.append(textEl, editContainer, editBtn, toggleBtn, deleteBtn);
+      article.append(checkbox, textEl, editContainer, deleteBtn);
       list.appendChild(article);
     });
   },
